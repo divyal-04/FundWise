@@ -1,8 +1,8 @@
 # FundWise
-Empower financial literacy: Track teen spending &amp; guide parents' oversight.
+## Empower financial literacy: Track teen spending &amp; guide parents' oversight.
 
 
- ## Fundwise is a Django-based project consisting of two apps: Accounts and Parent. It serves as an expense tracking system enabling parents to monitor and manage their child's expenditure.
+ ### Fundwise is a Django-based project consisting of two apps: Accounts and Parent. It serves as an expense tracking system enabling parents to monitor and manage their child's expenditure.
 
 
 ### Features

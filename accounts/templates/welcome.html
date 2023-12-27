@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FundWise</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            
+        }
+
+        h1 {
+            color: #337ab7;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 73px;
+            right: 46px;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .logout-btn.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Add style for the "Profile" and "Wallet" buttons */
+        .action-button {
+            margin: 10px;
+            padding: 10px 20px;
+            background:#801BCF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+        .action-button:hover {
+            background-color: #60119E; /* Darker color for hover */
+        }
+        @keyframes criss-cross-left {
+            0% {
+                transform: scaleX(1);
+                transform-origin: left;
+            }
+            100% {
+                transform: scaleX(0);
+                transform-origin: right;
+            }
+        }
+    
+        @keyframes criss-cross-right {
+            0% {
+                transform: scaleX(1);
+                transform-origin: right;
+            }
+            100% {
+                transform: scaleX(0);
+                transform-origin: left;
+            }
+        }
+    
+        /* Profile button styles */
+        #profile-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            overflow: hidden;
+            background-color: white;
+            border: 2px solid #09E8C0;
+            color: #08A98C;
+            transition: color 0.3s, border-color 0.3s, background-color 0.3s;
+        }
+    
+        #profile-button:hover:before,
+        #profile-button:hover:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #09E8C0;
+            transform-origin: right;
+            transform: scaleX(0);
+            animation-duration: 0.8s;
+            animation-direction: alternate;
+        }
+        
+        #profile-button:hover:after {
+            right: 0;
+            transform-origin: left;
+            /* animation-name: criss-cross-right;  Applying the slice effect animation on hover */
+        }
+    
+        #profile-button:hover {
+            color: white;
+            border-color: #09E8C0;
+            background-color:#801BCF;
+        }
+
+        /* Style for the profile data section */
+        #profile-data {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+            padding: 20px;
+            border: 1px solid #ccc; /* Adding a border */
+            background-color: #87D3E7; /* Adding a background color */
+            width: 500px;
+          margin: 0 auto;
+          border-radius: 10px;
+          font-family: 'Serif', Times New Roman;
+        }
+
+
+        /* Style for the balance section */
+        #balance-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        /* Style for the payment options */
+        #payment-options {
+            display: none;
+            margin-top: 20px;
+        }
+
+        /* Style for the transaction history section */
+        #transaction-history {
+            display: none;
+            margin-top: 20px;
+        }
+
+
+        #profile-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        #profile-button:hover + .logout-btn {
+            display: block;
+        }
+
+
+        #payment-options {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #87D3E7; /* Use rgba to set transparency */
+            border-radius: 10px;
+            width: 500px;
+            margin: 0 auto;
+        }
+        
+        #payment-options form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #payment-options h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            
+        }
+        
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #1FEBFF;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            outline: none;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #1FEBFF;
+        }
+
+        body {
+            background: #111;
+            height: 50vh;
+            
+          }
+          .wrapper span {
+            position: fixed;
+            bottom: -180px;
+            height: 50px;
+            width: 50px;
+            z-index: -1;
+            background-color: #18191f;
+            box-shadow: 0 0 50px #0072ff, 0 0 100px #0072ff, 0 0 150px #0072ff, 0 0 200px #0072ff;
+            animation: animate 10s linear infinite;
+          }
+          .wrapper span:nth-child(1) {
+            left: 60px;
+            animation-delay: 0.4s;
+          }
+          .wrapper span:nth-child(2) {
+            left: 10%;
+            animation-delay: 3s;
+            width: 60px;
+            height: 60px;
+          }
+          .wrapper span:nth-child(3) {
+            left: 20%;
+            animation-delay: 2s;
+          }
+          .wrapper span:nth-child(4) {
+            left: 30%;
+            animation-delay: 5s;
+            width: 80px;
+            height: 80px;
+          }
+          .wrapper span:nth-child(5) {
+            left: 40%;
+            animation-delay: 1s;
+          }
+          .wrapper span:nth-child(6) {
+            left: 50%;
+            animation-delay: 7s;
+          }
+          .wrapper span:nth-child(7) {
+            left: 60%;
+            animation-delay: 6s;
+            width: 100px;
+            height: 100px;
+          }
+          .wrapper span:nth-child(8) {
+            left: 70%;
+            animation-delay: 8s;
+          }
+          .wrapper span:nth-child(9) {
+            left: 80%;
+            animation-delay: 6s;
+            width: 90px;
+            height: 90px;
+          }
+          .wrapper span:nth-child(10) {
+            left: 90%;
+            animation-delay: 4s;
+          }
+          .banner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 5vh;
+          }
+          .content h2 b {
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke-width: 3px;
+            -webkit-text-stroke-color: #fff;
+            font-family: montserrat;
+            font-size: 80px;
+            text-transform: uppercase;
+            letter-spacing: 12px;
+          }
+          @keyframes animate {
+            0% {
+              transform: translateY(0);
+              opacity: 1;
+            }
+            80% {
+              opacity: .7;
+            }
+            100% {
+              transform: translateY(-800px) rotate(360deg);
+              opacity: 0;
+            }
+          }
+
+          .message {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 50px 90px; /* Increased padding */
+            background-color: #3DE768;
+            color: #333;
+            border-radius: 10px; /* Increased border radius */
+            font-size: 30px; /* Increased font size */
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 9999;
+            list-style: none;
+        }
+        
+        .message.show {
+            opacity: 1;
+            display: flex;
+            list-style: none;
+        }
+          
+        
+    </style>
+    <div class="wrapper">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      
+      <div class="banner">
+        <div class="content">
+        </div>
+      </div>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <div class="header">
+        
+    </div>
+    <h1 style=" color: #3D69E0 ;font-family: 'Serif', Times New Roman;">Welcome to FundWise</h1>
+    <p style="color: #C6D8DD; font-family: 'Serif', Times New Roman;" ><b>HEYY </b><strong style="text-transform: uppercase;">{{ first_name }}!!</strong></p>
+    <p style="width:1480px;color:#C6D8DD;font-family: 'Serif', Times New Roman;"> <b>How are you doinggg? </b></p> 
+
+    <div class="button-container">
+        <!-- Profile button to toggle the profile data -->
+        <button id="profile-button" class="action-button" onclick="toggleProfileData()" onmouseenter="showLogout()" onmouseleave="hideLogout()" style="font-family: 'Serif', Times New Roman;">Profile</button>
+    
+        <!-- Logout button -->
+        <form action="{% url 'logout' %}" method="POST" class="logout-btn" id="logoutButton">
+            {% csrf_token %}
+            <button type="submit" style="font-family: 'Serif', Times New Roman;">Logout</button>
+        </form>
+    </div>
+
+
+<!-- "Transaction history" button to toggle transaction history -->
+<button class="action-button" onclick="toggleTransactionHistory()" style="font-family: 'Serif', Times New Roman; ">Transaction history</button>
+
+
+ <!-- Wallet button to toggle the wallet balance -->
+<button class="action-button" onclick="toggleWalletBalance()"style="font-family: 'Serif', Times New Roman;">Wallet</button>
+
+
+
+
+    <!-- Profile data section -->
+    <div id="profile-data">
+        <h2><u>Student Profile</u></h2>
+        <p><strong>First Name:</strong> {{ student_data.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ student_data.last_name }}</p>
+        <p><strong>Birth Date:</strong> {{ student_data.birth_date }}</p>
+        <p><strong>Phone:</strong> {{ student_data.phone }}</p>
+        <p><strong>College/University:</strong> {{ student_data.school }}</p>
+        <p><strong>Major:</strong> {{ student_data.major }}</p>
+        <p><strong>Graduation Year:</strong> {{ student_data.graduation_year }}</p>
+        <p><strong>Annual Income:</strong> {{ student_data.annual_income }}</p>
+        <p><strong>Parent Name:</strong> {{ student_data.parent_name }}</p>
+    </div>
+
+    <!-- Balance section to display the current balance -->
+    <style>
+        #balance-section {
+            /* Style for the balance section container */
+            display: inline-block; /* Ensures the container fits the content */
+        }
+    
+        #balance-section p:nth-child(2) {
+            /* Style for the second paragraph within #balance-section (the balance amount) */
+            margin: 0; /* Remove default margin */
+            padding: 10px; /* Padding inside the box */
+            border: 2.3px solid black; /* Change border color to black */
+            border-radius: 0px; /* Rounded corners */
+            background-color: #1FEBFF; /* Background color */
+            display: inline-block; /* Ensures the container fits the content */
+            /* Additional styles specific to the balance paragraph */
+            font-size: 16px; /* Adjust font size */
+            color: #33; /* Text color */
+            /* You can add more styles as per your design */
+        }
+    </style>
+    <br> <br>
+    <div id="balance-section" style="display: none;">
+        <p style="color: white;font-family: 'Serif', Times New Roman;"  ><strong> <u>Current Balance</u></strong></p>
+        <p id="wallet-balance"> <b> ₹  {{ student_data.balance }} </b></p>
+    </div>
+    
+    <!--
+
+    <div id="message-section">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>  -->
+    
+
+    <!-- Payment options section -->
+    <div id="payment-options">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <h2 style="color: black;font-family: 'Serif', Times New Roman;" ><u>Make a Payment </u></h2>
+            <div class="message" id="message-container"> <!-- Container for messages -->
+                <ul ; class="messages">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <li  style="list-style: none;">{{ message }}</li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="form-group">
+                <label for="transaction-amount" style="font-family: 'Serif', Times New Roman;">Amount (₹):</label>
+                <input type="number" step="0.01" min="0" id="transaction-amount" name="transaction-amount" required>
+            </div>
+            <div class="form-group">
+                <label for="transaction-category" style="font-family: 'Serif', Times New Roman;">Category:</label>
+                <select id="transaction-category" style="font-family: 'Serif', Times New Roman;"name="transaction-category" required>
+                    <option value="Travelling">Travelling</option>
+                    <option value="Study Material">Study Material</option>
+                    <option value="Food">Food</option>
+                    <option value="Miscellaneous">Miscellaneous</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="transaction-note" style="font-family: 'Serif', Times New Roman;">Note:</label>
+                <textarea id="transaction-note" name="transaction-note" rows="3"></textarea>
+            </div>
+            <button type="submit" style="font-family: 'Serif', Times New Roman; background:#801BCF">Submit Transaction</button>
+        </form>
+    </div>
+
+    <!-- Transaction history section -->
+    <style>
+        /* Style for the transaction history container */
+        #transaction-history {
+          padding: 20px;
+          background-color: #87D3E7;
+          border: 1px solid #e5e5e5;
+          border-radius: 5px;
+          width: 500px;
+          margin: 0 auto;
+        }
+      
+        /* Style for the transaction history heading */
+        #transaction-history h2 {
+          color: #333;
+          font-size: 18px;
+          font-weight: bold;
+          margin-bottom: 15px;
+          font-family: 'Serif', Times New Roman;
+          
+        }
+      
+        /* Style for the transaction list */
+        #transaction-history ul {
+          list-style: none;
+          margin: 0 auto;
+          padding: 0;
+          width: 500px;
+        }
+      
+        /* Style for individual transaction items */
+        #transaction-history li {
+          margin-bottom: 10px;
+          padding: 10px;
+          background-color: #C2FAFF;
+          border: 1px solid #e5e5e5;
+          border-radius: 5px;
+        }
+      
+        /* Style for transaction details */
+        #transaction-history li strong {
+          color: #333;
+          font-weight: bold;
+        }
+      
+        /* Style for transaction amount */
+        #transaction-history li strong:first-of-type {
+          font-size: 16px;
+        }
+      
+        /* Style for transaction category and note */
+        #transaction-history li strong:not(:first-of-type) {
+          font-size: 14px;
+          margin-left: 10px;
+        }
+
+        #payment-options button[type="submit"] {
+            padding: 8px 12px;
+            background-color: #337ab7; /* Blue color */
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            border-radius: 5px; /* Creating a rounded shape */
+        }
+    
+        #payment-options button[type="submit"]:hover {
+            /* Hover effect for the submit button */
+            background-color: #135688; /* Darker blue on hover */
+        }
+    
+        /* Style for the logout button */
+        .logout-btn button[type="submit"] {
+            padding: 4px 4px;
+            background-color: #ff0000; /* Red color */
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            border-radius: 5px; /* Creating a rounded shape */
+        }
+    
+        .logout-btn button[type="submit"]:hover {
+            /* Hover effect for the logout button */
+            background-color: #800000; /* Darker red on hover */
+        }
+      </style>
+      
+      <div id="transaction-history">
+        <h2><u>Transaction History</u></h2>
+        <ul>
+            {% for transaction in transaction_history %}
+                <li>
+                    <strong>Time:</strong> <span id="formatted-time-{{ forloop.counter }}"></span><br>
+                    <strong>Amount:</strong> ₹{{ transaction.amount }}<br>
+                    <strong>Category:</strong> {{ transaction.category }}<br>
+                    <strong>Note:</strong> {{ transaction.note }}
+                </li>
+        
+                <script>
+                    // Get the timestamp and format it
+                    var timestamp = '{{ transaction.time }}';
+                    var date = new Date(timestamp);
+                    var options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                    var formattedTime = date.toLocaleDateString('en-US', options);
+        
+                    // Set the formatted time in the span
+                    var formattedTimeElement = document.getElementById('formatted-time-{{ forloop.counter }}');
+                    formattedTimeElement.textContent = ' ' + formattedTime;
+                </script>
+            {% endfor %}
+        </ul>
+        
+        
+    </div>
+
+
+    <script>
+
+        window.onload = function() {
+            document.getElementById('payment-options').style.display = 'block';
+        };
+        
+        function toggleProfileData() {
+            const profileData = document.getElementById('profile-data');
+            const balanceSection = document.getElementById('balance-section');
+            const paymentOptions = document.getElementById('payment-options');
+            const transactionHistory = document.getElementById('transaction-history');
+            const otherButtons = document.querySelectorAll('.action-button:not(#profile-button)');
+        
+            if (profileData.style.display === 'block') {
+                profileData.style.display = 'none';
+                otherButtons.forEach(button => {
+                    button.style.display = 'inline-block';
+                });
+            } else {
+                profileData.style.display = 'block';
+                balanceSection.style.display = 'none';
+                paymentOptions.style.display = 'none';
+                transactionHistory.style.display = 'none';
+                otherButtons.forEach(button => {
+                    button.style.display = 'none';
+                });
+            }
+        
+            if (profileData.style.display === 'none') {
+                // Show payment options if profile data is hidden
+                togglePaymentOptions();
+            }
+        }
+        
+        
+        
+
+        function toggleWalletBalance() {
+            const balanceSection = document.getElementById('balance-section');
+            const profileData = document.getElementById('profile-data');
+            const paymentOptions = document.getElementById('payment-options');
+            const transactionHistory = document.getElementById('transaction-history');
+        
+            balanceSection.style.display = balanceSection.style.display === 'none' ? 'block' : 'none';
+            profileData.style.display = 'none';
+            paymentOptions.style.display = 'none';
+            transactionHistory.style.display = 'none';
+        
+            if (balanceSection.style.display === 'none') {
+                // Show payment options if wallet balance is hidden
+                togglePaymentOptions();
+            }
+        }
+        
+    
+        function togglePaymentOptions() {
+            const profileData = document.getElementById('profile-data');
+            const balanceSection = document.getElementById('balance-section');
+            const paymentOptions = document.getElementById('payment-options');
+            const transactionHistory = document.getElementById('transaction-history');
+            
+            paymentOptions.style.display = 'block';
+            balanceSection.style.display = 'none';
+            profileData.style.display = 'none';
+            transactionHistory.style.display = 'none';
+        }
+    
+        function toggleTransactionHistory() {
+            const transactionHistory = document.getElementById('transaction-history');
+            transactionHistory.style.display = transactionHistory.style.display === 'none' ? 'block' : 'none';
+        
+            const profileData = document.getElementById('profile-data');
+            const balanceSection = document.getElementById('balance-section');
+            const paymentOptions = document.getElementById('payment-options');
+        
+            profileData.style.display = 'none';
+            balanceSection.style.display = 'none';
+            paymentOptions.style.display = 'none';
+        
+            if (transactionHistory.style.display === 'none') {
+                // Show payment options if transaction history is hidden
+                togglePaymentOptions();
+            }
+        }
+        
+
+        let logoutTimeout;
+
+        function showLogout() {
+            clearTimeout(logoutTimeout);
+            const logoutBtn = document.getElementById('logoutButton');
+            logoutBtn.classList.add('active');
+        }
+    
+        function hideLogout() {
+            const logoutBtn = document.getElementById('logoutButton');
+            const isHovered = logoutBtn.matches(':hover');
+    
+            if (!isHovered) {
+                logoutTimeout = setTimeout(() => {
+                    logoutBtn.classList.remove('active');
+                }, 300);
+            }
+        }
+
+
+        function submitTransaction() {
+            // Your transaction submission logic here...
+            
+            // Simulated successful transaction response (replace this with actual logic after a successful transaction)
+            const successfulTransaction = true;
+        
+            if (successfulTransaction) {
+                // Show the transaction success message in a pop-up
+                alert('Transaction successful!');
+            }
+        }   
+
+
+        function showMessage() {
+            var messageContainer = document.getElementById("message-container");
+            messageContainer.classList.add("show");
+        
+            // Show the message container
+            messageContainer.style.display = "flex";
+        
+            // Hide the message after a certain time (e.g., 5 seconds)
+            setTimeout(function() {
+                messageContainer.classList.remove("show");
+                // Hide the message container when there are no messages
+                messageContainer.style.display = "none";
+            }, 2500); // Adjust the time (in milliseconds) as needed
+        }
+        
+        // Check if there are messages and display them
+        document.addEventListener("DOMContentLoaded", function() {
+            var messagesExist = document.querySelector(".messages li");
+            if (messagesExist) {
+                showMessage();
+            }
+        });
+        
+    </script>
+
+    
+</body>
+</html>

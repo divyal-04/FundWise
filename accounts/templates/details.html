@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Details Form</title>
+  <link rel="stylesheet" href="https://unpkg.com/simplebar/dist/simplebar.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.min.css">
+
+  <style>
+    /* Styles from the second snippet */
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #000;
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+    .container {
+      position: relative;
+      width: 450px;
+      max-height: 80vh; /* Updated max-height to maintain visibility */
+      overflow-y: auto; /* Enable vertical scrolling */
+      background: #000;
+      box-shadow: 0 0 50px #0ef;
+      border-radius: 20px;
+      padding: 40px;
+      color: #fff;
+  }
+    .form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: 1s ease-in-out;
+    }
+    .form label {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+    .form input,
+    .form select {
+        width: calc(100% - 10px);
+        height: 35px;
+        font-size: 14px;
+        color: #fff;
+        padding: 5px;
+        background: transparent;
+        border: none;
+        outline: none;
+        border-bottom: 2px solid #fff;
+        transition: border-bottom-color 0.4s, box-shadow 0.4s;
+        margin-bottom: 15px;
+    }
+    .form input:focus,
+    .form input:valid,
+    .form select:focus,
+    .form select:valid {
+        border-bottom-color: #0ef;
+        box-shadow: 0 0 8px #0ef;
+    }
+    .form input:focus ~ label,
+    .form input:valid ~ label,
+    .form select:focus ~ label,
+    .form select:valid ~ label {
+        top: -20px;
+        font-size: 12px;
+        color: #0ef;
+    }
+    .form .btn {
+        width: 100%;
+        height: 40px;
+        background: #801BCF;
+        font-size: 16px;
+        color: #fff;
+        font-weight: 500;
+        cursor: pointer;
+        border-radius: 30px;
+        border: none;
+        outline: none;
+        transition: box-shadow 0.4s;
+        margin-top: 20px;
+    }
+    .form .btn:hover {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .form .alert {
+        background-color: lightblue;
+        color: #000;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+    .form .signUp-link {
+        font-size: 14px;
+        text-align: center;
+        margin: 15px 0;
+    }
+    .form .signUp-link p {
+        color: #fff;
+    }
+    .form .signUp-link p a {
+        color: #0ef;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .form .signUp-link p a:hover {
+        text-decoration: underline;
+    }
+
+    .error-container {
+      background-color: lightblue; /* Background color for error container */
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px; /* Spacing between the error container and the form */
+      list-style: none;
+      
+
+  }
+  
+  .error-message {
+      /* Style for individual error messages */
+      /* You can adjust the styles as needed */
+      padding: 8px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      color: Black; /* Red color for the error message text */
+      font-weight: bold;
+  }
+  
+  </style>
+</head>
+<body>
+  <!-- Existing HTML content -->
+  
+  <div class="container" data-simplebar>
+
+    <form method="post" action="{% url 'submit_form' %}" class="form">
+      {% csrf_token %}
+      <div class="error-container" id="errorContainer" style="display: none;">
+        {% if messages %}
+          {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+              <div class="error-message">{{ message }}</div>
+            </li>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <label for="first-name">First Name:</label>
+      <input type="text" id="first-name" name="first-name" required>
+
+      <label for="last-name">Last Name:</label>
+      <input type="text" id="last-name" name="last-name" required>
+
+      <label for="birth-date">Birth Date:</label>
+      <input type="text" id="birth-date" name="birth-date" required>
+
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required placeholder="same username as registered previously">
+
+      <label for="email">Email ID:</label>
+      <input type="email" id="email" name="email" required placeholder="same Email as registered previously">
+
+      <label for="phone">Phone No:</label>
+      <input type="number" id="phone" name="phone" pattern="[0-9]*" inputmode="numeric"required>
+
+      <label for="school">College/University Name:</label>
+      <input type="text" id="school" name="school" required>
+
+      <label for="major">Field of Study:</label>
+      <input type="text" id="major" name="major" required placeholder="eg. B.E. in AI-DS">
+
+      <label for="graduation-year">Expected Graduation Year:</label>
+      <input type="number" id="graduation-year" name="graduation-year" pattern="[0-9]*" inputmode="numeric" required>
+
+      <label for="annual-income">Annual Income:</label>
+      <select id="annual-income" name="annual-income" style="background:Black" required>
+        <option value="less than 60,000 ₹">Less than ₹60,000</option>
+        <option value="60,000 to 200,000 ₹">₹60,000 to ₹200,000</option>
+        <option value="200,000 - 500,000 ₹">₹200,000 - ₹500,000</option>
+        <option value="500,000-800,000 ₹">₹500,000 - ₹800,000</option>
+        <option value="more than 800,000 ₹">More than ₹800,000</option>
+      </select>
+
+      <label for="parent-name">Parent Name:</label>
+      <input type="text" id="parent-name" name="parent-name" required>
+    
+      <input type="submit" value="Submit" class="btn">
+    </form>
+  </div>
+  <script src="https://unpkg.com/simplebar/dist/simplebar.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.min.js"></script>
+
+  <script>
+    const asiaTimeZoneOffset = 330; // For UTC+5:30, offset is 5 hours and 30 minutes
+    const picker = new Pikaday({
+      field: document.getElementById('birth-date'),
+      yearRange: [1960, new Date().getFullYear()], // Set the year range from 1960 to the current year
+      format: 'YYYY-MM-DD', // Customize date format if needed
+      onSelect: function(date) {
+        const adjustedDate = new Date(date.getTime() + asiaTimeZoneOffset * 60 * 1000); // Adjust the date using the offset
+        const formattedDate = adjustedDate.toISOString().split('T')[0]; // Format date to 'YYYY-MM-DD'
+        document.getElementById('birth-date').value = formattedDate; // Set the formatted date to the input field
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const errorContainer = document.getElementById('errorContainer');
+      const errorMessages = errorContainer.querySelectorAll('.error-message');
+      // Check if there are any error messages, show container if there are
+      if (errorMessages.length > 0) {
+        errorContainer.style.display = 'block';
+      }
+    });
+  
+
+
+
+  
+    document.addEventListener("DOMContentLoaded", function() {
+      const asiaTimeZoneOffset = 330; // For UTC+5:30, offset is 5 hours and 30 minutes
+      const picker = new Pikaday({
+        field: document.getElementById('birth-date'),
+        yearRange: [1960, new Date().getFullYear()], // Set the year range from 1960 to the current year
+        format: 'YYYY-MM-DD', // Customize date format if needed
+        onSelect: function(date) {
+          const adjustedDate = new Date(date.getTime() + asiaTimeZoneOffset * 60 * 1000); // Adjust the date using the offset
+          const formattedDate = adjustedDate.toISOString().split('T')[0]; // Format date to 'YYYY-MM-DD'
+          document.getElementById('birth-date').value = formattedDate; // Set the formatted date to the input field
+        }
+      });
+    });
+  </script>
+  
+
+</body>
+</html>

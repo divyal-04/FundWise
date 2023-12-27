@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Parent Details</title>
+</head>
+<body>
+    <h1>Enter Parent Details</h1>
+    <form method="post" action="{% url 'parent_details' %}">
+        {% csrf_token %}
+
+        <div>
+            <label for="student-username">Student Username:</label>
+            <input type="text" id="student-username" name="student-username" required>
+        </div>
+
+        <div>
+            <label for="first-name">First Name:</label>
+            <input type="text" id="first-name" name="first_name" required>
+        </div>
+
+        <div>
+            <label for="last-name">Last Name:</label>
+            <input type="text" id="last-name" name="last_name" required>
+        </div>
+
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+
+        <div>
+            <label for="phone-no">Phone Number:</label>
+            <input type="tel" id="phone-no" name="phone_number" required>
+        </div>
+
+        <div>
+            <label for="annual-income">Annual Income:</label>
+            <select id="annual-income" name="annual_income" required>
+                <option value="less than 60,000 ₹">Less than ₹60,000</option>
+                <option value="60,000 to 200,000 ₹">₹60,000 to ₹200,000</option>
+                <option value="200,000 - 500,000 ₹">₹200,000 - ₹500,000</option>
+                <option value="500,000-800,000 ₹">₹500,000 - ₹800,000</option>
+                <option value="more than 800,000 ₹">More than ₹800,000</option>
+            </select>
+        </div>
+
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</body>
+</html>

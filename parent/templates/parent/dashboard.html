@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Parent Dashboard</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+       
+        #logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            overflow: hidden;
+            background-color: white;
+            border: 2px solid #09E8C0;
+            color: #08A98C;
+            transition: color 0.3s, border-color 0.3s, background-color 0.3s;
+            padding: 12px 24px; /* Increased padding to adjust button size */
+            border-radius: 5px; /* Adjusted border radius */
+        }
+    
+        #logout-btn:hover:before,
+        #logout-btn:hover:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #09E8C0;
+            transform-origin: right;
+            transform: scaleX(0);
+            animation-duration: 0.8s;
+            animation-direction: alternate;
+        }
+        
+        #logout-btn:hover:after {
+            right: 0;
+            transform-origin: left;
+            /* animation-name: criss-cross-right;  Applying the slice effect animation on hover */
+        }
+    
+        #logout-btn:hover {
+            color: white;
+            border-color: #09E8C0;
+            background-color:#F73112;
+        }
+        
+        #logout-btn.active {
+            display: block;
+            opacity: 1;
+        }
+
+
+        #transaction-history-section {
+            padding: 20px;
+            background-color: #87D3E7;
+            border: 1px solid #e5e5e5;
+            border-radius: 5px;
+            width: 500px;
+            margin: 0 auto;
+          }
+        
+          /* Style for the transaction history heading */
+          #transaction-history-section h2 {
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-family: 'Serif', Times New Roman;
+            
+          }
+        
+          /* Style for the transaction list */
+          #transaction-history-section ul {
+            list-style: none;
+            margin: 0 auto;
+            padding: 0;
+            width: 500px;
+          }
+        
+          /* Style for individual transaction items */
+          #transaction-history-section li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #C2FAFF;
+            border: 1px solid #e5e5e5;
+            border-radius: 5px;
+          }
+        
+          /* Style for transaction details */
+          #transaction-history-section li strong {
+            color: #333;
+            font-weight: bold;
+          }
+        
+          /* Style for transaction amount */
+          #transaction-history-section li strong:first-of-type {
+            font-size: 16px;
+          }
+        
+          /* Style for transaction category and note */
+          #transaction-history-section li strong:not(:first-of-type) {
+            font-size: 14px;
+            margin-left: 10px;
+          }
+        
+          #child-wallet-balance-section {
+            width: 200px;
+            margin: 20px auto; /* Set margins to auto to horizontally center */
+            display: none; /* Initially hide the box */
+        }
+        
+        /* Style for Wallet Balance Box */
+        .wallet-balance-box {
+            margin: 0 auto;
+            padding: 10px;
+            border: 2.3px solid black;
+            border-radius: 8px; /* Adjust border-radius to match your preference */
+            background-color: #1FEBFF;
+            font-size: 16px;
+            color: #33;
+            width: 70%;
+            height: auto;
+        }
+        
+        /* Style for Wallet Balance Amount */
+        .wallet-balance-amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: black; /* Set text color to black */
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .add-money-box {
+            width: 90%;
+            margin: 20px auto;
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #1FEBFF;
+        }
+
+        /* Style for the title of the Add Money box */
+        .add-money-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Style for the left and right sections within the Add Money box */
+        .add-money-sections {
+            display: flex;
+            justify-content: space-between;
+            height :110px;
+        }
+
+        /* Style for the individual sections (parent and child wallet inputs) */
+        .add-money-section {
+            width: 40%; /* Adjust the width as needed */
+            position: relative;
+            padding: 20px; /* Increased padding for larger sections */
+            border-radius: 8px; /* Larger border radius */
+            margin-bottom: 20px; /* Increased margin to create more space between sections */
+        }
+
+        /* Style for the input boxes */
+        .add-money-input {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 10px; /* Adjusted margin to create more space below the input fields */
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .add-money-section .add-money-input {
+            margin-bottom: 25px; /* Increase the margin to move the input fields lower */
+        }
+
+        /* Style for the add money buttons */
+        .add-money-button {
+            width: calc(80% - 70px);
+            padding: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .add-money-button:hover {
+            background-color: #E70F5A;
+        }
+
+        .add-money-section:nth-child(odd) {
+            background-color: #f1f1f1;
+        }
+        
+        /* Style for the child wallet section */
+        .add-money-section:nth-child(even) {
+            background-color: #e5e5e5; /* Change the color as needed */
+        }
+
+        
+        
+
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Center buttons horizontally */
+            margin-top: 20px; /* Add some space at the top */
+        }
+    
+        .action-button {
+            margin: 10px;
+            padding: 10px 20px;
+            background:#801BCF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            flex: 1; /* Allow buttons to expand equally */
+        }
+    
+        .action-button:hover {
+            background-color: #60119E; /* Darker color for hover */
+        }
+
+
+
+        .balance-box {
+            margin: 20px auto;
+            padding: 8px; /* Reduced padding */
+            border: 2px solid #ccc;
+            border-radius: 8px; /* Adjusted border radius */
+            background-color: #7A4DEA;
+            width: 180px; /* Adjusted width */
+            height: 60px; /* Adjusted height */
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center; /* Center horizontally */
+        }
+    
+        /* Updated styles for the balance text */
+        .balance-text,
+        .balance-amount {
+            font-size: 16px; /* Reduced font size */
+            color: black;
+            margin: 0;
+        }
+    
+        .balance-amount {
+            font-size: 20px; /* Adjusted font size */
+            font-weight: bold;
+            color: black; /* Adjust color as needed */
+        }
+
+
+        .message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 50px 90px; /* Increased padding */
+            background-color: #3DE768;
+            color: #333;
+            border-radius: 10px; /* Increased border radius */
+            font-size: 30px; /* Increased font size */
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 9999;
+        }
+        
+        .message.show {
+            opacity: 1;
+        }
+
+        body {
+            background: #111;
+            height: 50vh;
+            
+          }
+          .wrapper span {
+            position: fixed;
+            bottom: -180px;
+            height: 50px;
+            width: 50px;
+            z-index: -1;
+            background-color: #18191f;
+            box-shadow: 0 0 50px #0072ff, 0 0 100px #0072ff, 0 0 150px #0072ff, 0 0 200px #0072ff;
+            animation: animate 10s linear infinite;
+          }
+          .wrapper span:nth-child(1) {
+            left: 60px;
+            animation-delay: 0.4s;
+          }
+          .wrapper span:nth-child(2) {
+            left: 10%;
+            animation-delay: 3s;
+            width: 60px;
+            height: 60px;
+          }
+          .wrapper span:nth-child(3) {
+            left: 20%;
+            animation-delay: 2s;
+          }
+          .wrapper span:nth-child(4) {
+            left: 30%;
+            animation-delay: 5s;
+            width: 80px;
+            height: 80px;
+          }
+          .wrapper span:nth-child(5) {
+            left: 40%;
+            animation-delay: 1s;
+          }
+          .wrapper span:nth-child(6) {
+            left: 50%;
+            animation-delay: 7s;
+          }
+          .wrapper span:nth-child(7) {
+            left: 60%;
+            animation-delay: 6s;
+            width: 100px;
+            height: 100px;
+          }
+          .wrapper span:nth-child(8) {
+            left: 70%;
+            animation-delay: 8s;
+          }
+          .wrapper span:nth-child(9) {
+            left: 80%;
+            animation-delay: 6s;
+            width: 90px;
+            height: 90px;
+          }
+          .wrapper span:nth-child(10) {
+            left: 90%;
+            animation-delay: 4s;
+          }
+          .banner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 5vh;
+          }
+          .content h2 b {
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke-width: 3px;
+            -webkit-text-stroke-color: #fff;
+            font-family: montserrat;
+            font-size: 80px;
+            text-transform: uppercase;
+            letter-spacing: 12px;
+          }
+          @keyframes animate {
+            0% {
+              transform: translateY(0);
+              opacity: 1;
+            }
+            80% {
+              opacity: .7;
+            }
+            100% {
+              transform: translateY(-800px) rotate(360deg);
+              opacity: 0;
+            }
+          }
+          
+   
+        
+    </style>
+    <div class="wrapper">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      
+      <div class="banner">
+        <div class="content">
+        </div>
+      </div>
+    
+    </style>
+</head>
+<body>
+    <h1 style=" color: #3D69E0;font-family: 'Serif', Times New Roman;">Welcome to FundWise</h1>
+    <p style="color: #C6D8DD; font-family: 'Serif', Times New Roman;" ><b>HELLO </b><strong style="text-transform: uppercase;">{{ parent_first_name }}!</strong></p>
+    <p style="  color:#C6D8DD; font-family: 'Serif', Times New Roman;"><b>Child Username: {{ child_username }} <b></p>
+    
+
+    <!-- Box for Parent's Wallet Balance -->
+<div class="balance-box">
+    <p style="font-family: 'Serif', Times New Roman;"class="balance-text"  > <b> Your Wallet Balance: </b></p>
+    <p style="font-family: 'Serif', Times New Roman;" class="balance-amount">₹ {{ parent_wallet }}</p>
+</div>
+
+    <!-- Display all messages -->
+    
+
+    <script>
+        // Wrap your existing JavaScript in a window.onload function or place it at the end of the body tag
+        window.onload = function() {
+            {% for message in all_messages %}
+                showMessage("{{ message }}"); // Display each message content
+            {% endfor %}
+            // Your existing code...
+    
+            // Function to handle message display and disappearance
+            function showMessage(message) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+                messageElement.innerText = message;
+    
+                // Add the message element to the body
+                document.body.appendChild(messageElement);
+    
+                // Display the message
+                setTimeout(function() {
+                    messageElement.classList.add('show');
+                }, 100);
+    
+                // Hide the message after 3 seconds
+                setTimeout(function() {
+                    messageElement.classList.remove('show');
+    
+                    // Remove the message element from the DOM after hiding
+                    setTimeout(function() {
+                        document.body.removeChild(messageElement);
+                    }, 500); // Time taken for the fade-out animation
+                }, 2500); // 2.5 seconds delay before hiding
+            }
+    
+            // Example usage: showMessage('This is a floating message.');
+            // Call showMessage with your message content whenever you want to display a message.
+        }
+    </script>
+    <!-- Add button to open sections -->
+    <div class="button-container">
+        <button id="transaction-history-button" class="action-button" style="font-family: 'Serif', Times New Roman; ">Track Child's expenditure</button>
+        <button id="wallet-balance-button" class="action-button" style="font-family: 'Serif', Times New Roman;">Child's Wallet Balance</button>
+    </div>
+   
+    
+    <!-- Transaction History Section -->
+    <div id="transaction-history-section" style="display: none;">
+        <h2 style="font-family: 'Serif', Times New Roman;">Transaction History:</h2>
+        <ul style="font-family: 'Serif', Times New Roman;">
+            {% for transaction in transaction_history %}
+                <li>
+                    Amount: {{ transaction.amount }}<br>
+                    Category: {{ transaction.category }}<br>
+                    Note: {{ transaction.note }}<br>
+                    Time: {{ transaction.time }}<br>
+                </li>
+            {% empty %}
+                <p>No transactions available.</p>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Wallet Balance Section -->
+    <div id="child-wallet-balance-section">
+        <div class="wallet-balance-box">
+            <div id="child-wallet-balance" class="wallet-balance-amount">
+               <p style="font-family: 'Serif', Times New Roman;"> ₹ &nbsp{{ wallet_balance }}</p> 
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("wallet-balance-button").addEventListener("click", function() {
+            var childWalletBalanceSection = document.getElementById("child-wallet-balance-section");
+            if (childWalletBalanceSection.style.display === "none") {
+                childWalletBalanceSection.style.display = "block";
+            } else {
+                childWalletBalanceSection.style.display = "none";
+            }
+        });
+    </script>
+
+   
+
+    <!-- JavaScript to handle button clicks -->
+    
+
+    <!-- Add Money to Parent's Wallet Section -->
+    <div class="add-money-box">
+        <div  style="font-family: 'Serif', Times New Roman;"class="add-money-title"><u> Add Money  </u></div>
+        <div class="add-money-sections">
+            <!-- Left section for adding money to the parent's wallet -->
+            <div class="add-money-section">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="number" step="0.01" min="0" class="add-money-input" name="add_to_wallet" placeholder="Enter amount (Rupees)">
+                    <button type="submit" class="add-money-button" style="font-family: 'Serif', Times New Roman;">Your Wallet</button>
+                </form>
+            </div>
+            <!-- Right section for adding money to the child's wallet -->
+            <div class="add-money-section">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="number" step="0.01" min="0" class="add-money-input" name="add_to_child_wallet" placeholder="Enter amount (Rupees)">
+                    <button  type="submit" class="add-money-button">Child's Wallet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <form method="post" id="logoutForm" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button id='logout-btn'  type="submit" class="logout-btn {% if condition_to_show_logout %}active{% endif %}">Logout</button>
+    </form>
+    
+    
+    
+    <script>
+      document.getElementById('logoutForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevents the default form submission
+        
+        // Assuming logout is successful, redirect to 'parent_login' page
+        // You may replace this setTimeout with your actual logout action handling
+        setTimeout(function() {
+          window.location.href = "{% url 'parent_login' %}";
+        }, 1); // Redirect after 1 second (you can adjust this timing)
+      });
+    </script>
+
+    
+    <script>
+        // Function to toggle the visibility of the "Add Money" section
+        function toggleAddMoneySection() {
+            var addMoneySection = document.querySelector(".add-money-box");
+            if (addMoneySection.style.display === "none") {
+                addMoneySection.style.display = "block";
+            } else {
+                addMoneySection.style.display = "none";
+            }
+        }
+    
+        // Function to toggle the visibility of the transaction history section
+        function toggleSection(sectionId) {
+            var section = document.getElementById(sectionId);
+            if (section.style.display === "none") {
+                section.style.display = "block";
+                // Hide the "Add Money" section when showing transaction history
+                document.querySelector(".add-money-box").style.display = "none";
+            } else {
+                section.style.display = "none";
+                // Show the "Add Money" section when hiding transaction history
+                toggleAddMoneySection();
+            }
+        }
+    
+        // Add click event listeners to the buttons
+        document.getElementById("transaction-history-button").addEventListener("click", function() {
+            toggleSection("transaction-history-section");
+        });
+    
+        document.getElementById("wallet-balance-button").addEventListener("click", function() {
+            toggleWalletBalance();
+        });
+    </script>
+    
+    
+</body>
+</html>
